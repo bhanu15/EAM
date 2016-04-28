@@ -25,11 +25,15 @@ public class EmployeeTimeRecordServiceImpl  implements EmployeeTimeRecordService
 	@Override
 	@Transactional
 	public void createLoginRecord(int employeeId) {
+		//Testing
 		if (!isEmployeeLoginTimeRecordedForToday(employeeId)){
 			LoginTimeRecord loginTimeRecord = new LoginTimeRecord(new EmployeeTimeRecordId(employeeId, getCurrentTimestamp()));
 			employeeTimeRecordDAO.createLoginTimeRecord(loginTimeRecord);
 		}		
 	}
+	
+	
+	//Testing
 
 	@Override
 	@Transactional

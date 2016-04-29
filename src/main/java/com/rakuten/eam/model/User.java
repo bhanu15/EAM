@@ -1,8 +1,22 @@
 package com.rakuten.eam.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity  
+@Table(name = "user") 
 public class User {
+	
+	@Id  
+	@Column(name = "user_name")
 	private String userName;
+	
+	@Column(name = "password")
 	private String password;
+	
+	@Column(name = "role")
 	private String role;
 	public String getUserName() {
 		return userName;

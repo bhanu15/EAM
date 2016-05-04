@@ -2,6 +2,9 @@ package com.rakuten.eam.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -10,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.rakuten.eam.model.Employee;
 import com.rakuten.eam.service.EmployeeService;
@@ -26,31 +30,49 @@ public class EmployeeController {
 	public void setEmployeeService(EmployeeService employeeService){
 		this.employeeService = employeeService;
 	}
+	
+	@RequestMapping(value = "/create", method = RequestMethod.GET)  
+	public ModelAndView createEmployee(HttpServletRequest request, HttpServletResponse response, Employee employee) {   
+		ModelAndView model = new ModelAndView("/employee/create");
+		return model; 	  
+	}
 
 	@RequestMapping(value = "/create", method = RequestMethod.POST)  
-	public void createEmployee(@ModelAttribute("employee") Employee p) {   
-		employeeService.createEmployee(p);  	  
+	public boolean createEmployee(@ModelAttribute("employee") Employee p) {   
+		employeeService.createEmployee(p);  
+		return true;
 	}  
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)  
-	public @ResponseBody Employee getEmployee(@PathVariable("id") int id) {  
-		Employee employee = null;  
-		employee = employeeService.getEmployeeById(id);  
-		return employee;  
+	public @ResponseBody ModelAndView getEmployee(@PathVariable("id") int id) {    
+		Employee employee = employeeService.getEmployeeById(id);
+		ModelAndView model = new ModelAndView("employee/displayEmployee", "employee", employee);	
+		return model;  
 	}  
 
 
-	@RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)  
+	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)  
 	public @ResponseBody void deleteEmployee(@PathVariable("id") int id) {     
 		employeeService.deleteEmployee(id);  	  
 	}  
 
+	@RequestMapping(value="/edit/{id}", method = RequestMethod.GET)
+	public ModelAndView editEmployee(@PathVariable("id") int id){
+		Employee employee = employeeService.getEmployeeById(id);
+		ModelAndView model = new ModelAndView("/employee/editEmployee", "employee", employee);
+		return model; 	
+	}
 
-	@RequestMapping(value="edit/{id}", method = RequestMethod.PUT)
-	public void updateEmployee(@PathVariable("id") int id,@ModelAttribute("employee") Employee employee){
-		employee.setEmployeeId(id);
+	@RequestMapping(value="/update", method = RequestMethod.PUT)
+	public void updateEmployee(@ModelAttribute("employee") Employee employee){
 		employeeService.updateEmployee(employee);
 	}
+	
+	@RequestMapping(value = "/searchbox", method = RequestMethod.GET)  
+	public ModelAndView searchEmployee() {   
+		ModelAndView model = new ModelAndView("/employee/search");
+		return model; 	
+	} 
 	
 	@RequestMapping(value = "/search/{searchKeyword}", method = RequestMethod.GET)  
 	public @ResponseBody List<Employee> getEmployeeByKeyword(@PathVariable("searchKeyword") String searchKeyword) {  

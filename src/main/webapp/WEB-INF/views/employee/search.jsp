@@ -61,31 +61,20 @@
 	  color:  #bf0000;
 	  font-size: 14px;
 	}
-	
-	.ui-menu {
-/* 	top:-50px; */
-/* 	    position: relative; */
-/*     left: 180px; */
-/*     width: 200px; */
-/*     height: 120px; */
-/*     border: 3px solid #8AC007; */
-		
-/*     text-align: center; */
-	}           
+	.form-control, .autocomplete{
+		left: 180px;
+	}
+        
 	.ui-widget{
 	left: 180px !important;
 /* 	top: 10px !important; */
-	}
+ 	} 
 	
-	ul.ui-autocomplete li.ui-menu-item{
-						position: relative;
-						text-align:center;
-						top: 10px;
-						}
-/* 	.ui-autocomplete{ */
-/*       left:132.5px !important; */
-/*       width:305px !important; */
-/*   } */
+	
+ 	.ui-autocomplete{ 
+       left:250px !important; 
+/*        width:305px !important;  */
+   } 
 	 </style>
 </head>
 <body>
@@ -181,10 +170,6 @@
     		   } 
     		   }); 
     		   }); 
-    	   
-    	   $('.userSuggestions').click(function(){
-    		   alert("User Suggestion event");
-    	   });
     	 });
        
        function edit()
@@ -199,12 +184,6 @@
     	   var url = employeeContext+"employee/create";
     	   window.open(url,null,"height=500,width=500,status=yes,toolbar=no,menubar=no,location=center");
        }
-       
-  
-
-
-        
-   
        
 </script>  
 

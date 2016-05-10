@@ -8,8 +8,9 @@
 <title>Welcome</title>
 </head>
 <body>
+
 	<center>Welcome ${user.userName}</center>
 	<jsp:include page="employee/search.jsp"/>           
-       
+     
 </body>
 </html>

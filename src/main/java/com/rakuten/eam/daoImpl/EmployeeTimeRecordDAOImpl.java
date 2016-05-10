@@ -54,7 +54,7 @@ public class EmployeeTimeRecordDAOImpl implements  EmployeeTimeRecordDAO{
 	@Override
 	public void updateLogoutTimeRecord(LogoutTimeRecord logoutTimeRecord) {
 		Session session = this.sessionFactory.getCurrentSession();
-		String sql = "update employee_logout set time_captured = '"+ logoutTimeRecord.getEmployeeTimeRecordId().getTimeCaptured()+ "' WHERE employee_id = "+ logoutTimeRecord.getEmployeeTimeRecordId().getEmployeeId();
+		String sql = "update employee_logout set time_captured = '"+ logoutTimeRecord.getEmployeeTimeRecordId().getTimeCaptured()+ "' WHERE employee_id = "+ logoutTimeRecord.getEmployeeTimeRecordId().getEmployeeId() + " and date(time_captured) = date(CURDATE())";
 		SQLQuery query = session.createSQLQuery(sql);	
 		query.executeUpdate();
 	}

@@ -17,13 +17,8 @@
 		    	    	type: 'PUT',
 		    	    	data: str,
 		    	    	url:  "/eam/employee/update/?"+str, 
-		    	    	success: function(result){
-		    	    		if (result){
-		    	    			$("#status").text("Successfully updated");
-		    	    		}
-		    	    		else{
-		    	    			$("#status").text("Failed to update");
-		    	    		}
+		    	    	success: function(data){
+		    	    		$("#status").html(data.message); 
 		    	    }});
 		    	});
 	       });

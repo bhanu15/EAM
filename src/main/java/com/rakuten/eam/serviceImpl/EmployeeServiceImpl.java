@@ -25,14 +25,16 @@ public class EmployeeServiceImpl implements EmployeeService{
 
 	@Override
 	@Transactional
-	public void createEmployee(Employee employee) {
-		employeeDAO.createEmployee(employee);
+	public boolean createEmployee(Employee employee) {
+		
+		return employeeDAO.createEmployee(employee);
+		
 	}
 
 	@Override
 	@Transactional
-	public void updateEmployee(Employee p) {
-		employeeDAO.updateEmployee(p);
+	public boolean updateEmployee(Employee p) {
+		return employeeDAO.updateEmployee(p);
 	}
 
 
@@ -44,8 +46,8 @@ public class EmployeeServiceImpl implements EmployeeService{
 
 	@Override
 	@Transactional
-	public void deleteEmployee(int id) {
-		employeeDAO.deleteEmployee(id);
+	public boolean deleteEmployee(int id) {
+		return employeeDAO.deleteEmployee(id);
 	}
 
 	@Override

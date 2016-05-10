@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +16,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.rakuten.eam.exception.EmployeeAlreadyExistException;
+import com.rakuten.eam.exception.EmployeeNotFoundException;
 import com.rakuten.eam.model.Employee;
+import com.rakuten.eam.model.Status;
 import com.rakuten.eam.service.EmployeeService;
 
 @RestController  
@@ -33,14 +37,17 @@ public class EmployeeController {
 	
 	@RequestMapping(value = "/create", method = RequestMethod.GET)  
 	public ModelAndView createEmployee(HttpServletRequest request, HttpServletResponse response, Employee employee) {   
-		ModelAndView model = new ModelAndView("/employee/create");
-		return model; 	  
+		return new ModelAndView("/employee/create");
+		 	  
 	}
-
-	@RequestMapping(value = "/create", method = RequestMethod.POST)  
-	public boolean createEmployee(@ModelAttribute("employee") Employee p) {   
-		employeeService.createEmployee(p);  
-		return true;
+	
+	@RequestMapping(value = "/create", method = RequestMethod.POST)
+	public Status createEmployee(@ModelAttribute("employee") Employee employee) {  
+		boolean isSuccess = employeeService.createEmployee(employee); 	
+		if (isSuccess){
+			return(new Status(true,"Employee created successfully"));
+		}
+		return(new Status(false,"Employee creation failed"));
 	}  
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)  
@@ -52,8 +59,12 @@ public class EmployeeController {
 
 
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)  
-	public @ResponseBody void deleteEmployee(@PathVariable("id") int id) {     
-		employeeService.deleteEmployee(id);  	  
+	public @ResponseBody Status deleteEmployee(@PathVariable("id") int id) {     
+		boolean isSuccess = employeeService.deleteEmployee(id);  
+		if (isSuccess){
+			return(new Status(true,"Employee deleted successfully"));
+		}
+		return(new Status(false,"Employee deletion failed"));
 	}  
 
 	@RequestMapping(value="/edit/{id}", method = RequestMethod.GET)
@@ -64,14 +75,18 @@ public class EmployeeController {
 	}
 
 	@RequestMapping(value="/update", method = RequestMethod.PUT)
-	public void updateEmployee(@ModelAttribute("employee") Employee employee){
-		employeeService.updateEmployee(employee);
+	public Status updateEmployee(@ModelAttribute("employee") Employee employee){
+		boolean isSuccess = employeeService.updateEmployee(employee);
+		if (isSuccess){
+			return(new Status(true,"Employee updated successfully"));
+		}
+		return(new Status(false,"Employee updation failed"));
 	}
 	
 	@RequestMapping(value = "/searchbox", method = RequestMethod.GET)  
 	public ModelAndView searchEmployee() {   
-		ModelAndView model = new ModelAndView("/employee/search");
-		return model; 	
+		return new ModelAndView("/employee/search");
+			
 	} 
 	
 	@RequestMapping(value = "/search/{searchKeyword}", method = RequestMethod.GET)  
@@ -80,6 +95,15 @@ public class EmployeeController {
 		employees = employeeService.getEmployeeByKeyword(searchKeyword);  
 		return employees;  
 	} 
+	
+	@ExceptionHandler(EmployeeNotFoundException.class)
+	  public Status employeeNotFoundException(RuntimeException exception) {
+	    return new Status(false, "Employee not found");
+	  }
+	@ExceptionHandler(EmployeeAlreadyExistException.class)
+	  public Status amployeeAlreadyExistException(RuntimeException exception) {
+	    return new Status(false, "Employee already exist");
+	  }
 }
 
 

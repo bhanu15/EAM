@@ -23,18 +23,18 @@ public class UserController
 
 	@RequestMapping(value="/login",method=RequestMethod.GET)
 	public ModelAndView displayLogin(HttpServletRequest request, HttpServletResponse response, User user){
-		ModelAndView model = new ModelAndView("login");
-		//LoginBean loginBean = new LoginBean();
-		//model.addObject("loginBean", loginBean);
-		return model;
+		if(request.getSession().getAttribute("user")!=null){
+			return new ModelAndView("welcome", "user", request.getSession().getAttribute("user"));
+		}
+		return new ModelAndView("login");
+		
 	}
-	@RequestMapping(value="/authenticate",method=RequestMethod.POST)
+	@RequestMapping(value="/authenticate",method=RequestMethod.GET)
 	public ModelAndView executeLogin(HttpServletRequest request, HttpServletResponse response, @ModelAttribute("user") User user){
 		ModelAndView model= null;
-
 		boolean isValidUser = userService.authenticateUser(user);
 		if(isValidUser){		
-			request.setAttribute("user", user);
+			request.getSession().setAttribute("user", user);
 			model = new ModelAndView("welcome");
 		}
 		else{
@@ -43,4 +43,5 @@ public class UserController
 		}
 		return model;
 	}
+	
 }

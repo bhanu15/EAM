@@ -6,7 +6,7 @@
 <title>Employee Details</title>
 </head>
 <body> 
-<table border="1" align="left" >
+<table border="1" align="center" >
 	
 		<tr>
 			<th>Employee Id</th>

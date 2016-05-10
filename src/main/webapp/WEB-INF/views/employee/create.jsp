@@ -17,13 +17,8 @@
 		    	    $.ajax({type: "POST", 
 		    	    	data: str,
 		    	    	url: "create", 
-		    	    	success: function(result){
-		    	    		if (result){
-		    	    			$("#status").text("Successfully inserted");
-		    	    		}
-		    	    		else{
-		    	    			$("#status").text("Failed to insert");
-		    	    		}
+		    	    	success: function(data){
+		    	    		$("#status").html(data.message); 
 		    	    }});
 		    	});
 	       });

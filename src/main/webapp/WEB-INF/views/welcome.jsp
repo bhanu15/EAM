@@ -9,7 +9,7 @@
 </head>
 <body>
 
-	<center>Welcome ${user.userName}</center>
+	<center style="font-size: 34px;">Welcome ${user.userName}</center>
 	<jsp:include page="employee/search.jsp"/>           
      
 </body>

@@ -208,30 +208,26 @@
        
 </script>  
 
-    	 <div style="width:100%">	
-    	 	<div>
-    	 		<div style="float: left" >
+    	 <div  id="temp" style="width:100%;top:150px;padding-top:50px;">	
+    	 		<div style="float: left;padding-left:50px;" >
 					<button id="add" onclick="add()" class="mybutton2" >Add Employee</button>
 		
 					<button id="edit" onclick="edit()" class="mybutton2">Edit Employee</button>  
 		
 					<button id="delete" class="mybutton2">Delete Employee</button> 
 				</div>
-				<div style="float: right">
+				<div style="float: right;padding-right:50px;">
 					<button id="logout" class="mybutton2">Logout</button> 
     			</div>
-  			</div>
   		</div>
-  		<div style="width:100%;padding:50px">
-  			<div>
+		
+  		<div style="width:100%;padding:75px;top:150px;padding-right:250px;padding-left:250px;">
   				<div id="status" class="validationmessage" style="text-align: center;"></div> 
     	 		<div  style="text-align: center;">
 					<input type="text" id="employeeId" class="form-control autocomplete" placeholder="Search Employee" required="true" class="myinput"/>
-			 	 
-    	 			<button id="userSearch" class="mybutton2">Search</button>
     			</div>
-    		</div>
     	</div>
+    	<button id="userSearch" class="mybutton2" style="width:10%;padding:10px;margin-left:625px;top:50px;">Search</button>
     	<div style="width:100%">
      		<div id="response" class="validationmessage"></div>
      	</div>

@@ -66,6 +66,7 @@
        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/jquery-ui.min.js"></script>   
        <script>
        $(document).ready(function () {
+    	   var employeeContext = "/EmployeeManager/";
     	   $("input#employeeId").autocomplete({
     	   source: function (request, response) {
     	   var term = request.term;
@@ -96,7 +97,7 @@
     		   employeeId=$("input#employeeId").val();  
     		   $.ajax({ 
     		   type:"GET", 
-    		   url:"/eam/employee/"+employeeId,  
+    		   url:employeeContext+"employee/"+employeeId,  
     		   success:function(data){ 
     		   $("#response").html(data); 
     		   } 
@@ -107,7 +108,7 @@
     		   employeeId=$("input#employeeId").val();  
     		   $.ajax({ 
     		   type:"DELETE", 
-    		   url:"/eam/employee/delete/"+employeeId,  
+    		   url:employeeContext+"employee/delete/"+employeeId,  
     		   success:function(data){ 
     		   $("#status").html(data.message); 
     		   } 
@@ -117,7 +118,7 @@
     		   employeeId=$("input#employeeId").val();  
     		   $.ajax({ 
     		   type:"POST", 
-    		   url:"/eam/checkin?employeeId="+employeeId,  
+    		   url:employeeContext+"checkin?employeeId="+employeeId,  
     		   success:function(data){ 
     		   $("#status").html(data); 
     		   } 
@@ -127,7 +128,7 @@
     		   employeeId=$("input#employeeId").val();  
     		   $.ajax({ 
     		   type:"POST", 
-    		   url:"/eam/checkout?employeeId="+employeeId,  
+    		   url:employeeContext+"checkout?employeeId="+employeeId,  
     		   success:function(data){ 
     		   $("#status").html(data); 
     		   } 
@@ -136,9 +137,9 @@
     	   $("#logout").click(function(){   
     		   $.ajax({ 
     		   type:"POST", 
-    		   url:"/eam/logout",  
+    		   url:employeeContext+"logout",  
     		   success:function(data){   			   
-    			   window.location.href ="/eam/login";
+    			   window.location.href =employeeContext+"login";
     		   } 
     		   }); 
     		   }); 
@@ -148,13 +149,13 @@
        {
          
        var employeeId = $("input#employeeId").val();  
-       window.open("/eam/employee/edit/"+employeeId,null,
+       window.open(employeeContext+"employee/edit/"+employeeId,null,
        "height=500,width=500,status=yes,toolbar=no,menubar=no,location=center");
        }
        
        function add()
        {  
-       window.open("/eam/employee/create",null,
+       window.open(employeeContext+"employee/create",null,
        "height=500,width=500,status=yes,toolbar=no,menubar=no,location=center");
        }
 

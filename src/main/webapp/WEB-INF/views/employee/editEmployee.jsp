@@ -11,12 +11,13 @@
 
 	       <script>
 	       $(document).ready(function(){
+	    	   var employeeContext = "/EmployeeManager/";
 		       $("#save").click(function(){
 		    	   var str = $("#updateEmployeeForm").serialize();
 		    	    $.ajax({
 		    	    	type: 'PUT',
 		    	    	data: str,
-		    	    	url:  "/eam/employee/update/?"+str, 
+		    	    	url:  employeeContext+"employee/update/?"+str, 
 		    	    	success: function(data){
 		    	    		$("#status").html(data.message); 
 		    	    }});

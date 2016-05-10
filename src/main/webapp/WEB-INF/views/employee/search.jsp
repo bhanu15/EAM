@@ -3,6 +3,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+   <link href="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.css" rel="stylesheet"/>
+<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/css/bootstrap.css" rel="stylesheet"/>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 	<title>Welcome</title>
 	<style type="text/css">
@@ -58,42 +60,78 @@
 	  margin: 15px 15px 15px;
 	  color:  #bf0000;
 	  font-size: 14px;
+	}
+	
+	.ui-menu {
+/* 	top:-50px; */
+/* 	    position: relative; */
+/*     left: 180px; */
+/*     width: 200px; */
+/*     height: 120px; */
+/*     border: 3px solid #8AC007; */
+		
+/*     text-align: center; */
 	}           
+	.ui-widget{
+	left: 180px !important;
+/* 	top: 10px !important; */
+	}
+	
+	ul.ui-autocomplete li.ui-menu-item{
+						position: relative;
+						text-align:center;
+						top: 10px;
+						}
+/* 	.ui-autocomplete{ */
+/*       left:132.5px !important; */
+/*       width:305px !important; */
+/*   } */
 	 </style>
 </head>
 <body>
        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/jquery-ui.min.js"></script>   
-       <script>
+
+
+		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/js/bootstrap.js"></script>
+   
+      <script type="text/javascript">
+	      var employeeContext = "/EmployeeManager/";
+		   var hostName = "http://localhost:8080"+employeeContext;
+      </script>
+      <script>
        $(document).ready(function () {
-    	   var employeeContext = "/EmployeeManager/";
-    	   $("input#employeeId").autocomplete({
-    	   source: function (request, response) {
-    	   var term = request.term;
-    	   var restUrl = "http://localhost:8080/eam/employee/search/"+term;
 
-    	   $.getJSON(restUrl, function (employees) {
-    	   var items = [];
-    	   $.each(employees, function (i, result) {                          
-    	     var item = {
-    	       label: result.firstName+" "+result.lastName+" "+result.employeeId,
-    	       value: result.employeeId
-    	       };
-
-    	       items.push(item);
-    	       });
-
-    	   
-    	       response(items);
-    	       
-    	       });
-    	     }
-    	   
+		$(".autocomplete").autocomplete({
+			source:  function(request, response){
+				  var term = request.term;
+		     	   var restUrl = hostName+"employee/search/"+term;
+		     	   var items = [];
+		     	   
+		     	  $.ajax({
+		     	        type: 'GET',
+		     	        url: restUrl,
+		     	        dataType: 'json',
+		     	        async: false ,
+		     	        success: function(employees) { 
+		     	        	 $.each(employees, function (i, result) {     
+		     	        		var item = {
+	 		  			     	    	label: result.firstName+" "+result.lastName+" "+result.employeeId,
+	 		  			     	        value: result.employeeId
+	 		  			     	       };
+		  			 			items.push(item);
+		  		     	      });
+		     	        	return items;
+		     	        },
+		     	    });
+				response( items);
+			}
     	   });
     	   
-    	   
 		      
-    	   $("#view").click(function(){ 
+    	   $("#userSearch").click(function(){ 
     		   employeeId=$("input#employeeId").val();  
     		   $.ajax({ 
     		   type:"GET", 
@@ -137,29 +175,39 @@
     	   $("#logout").click(function(){   
     		   $.ajax({ 
     		   type:"POST", 
-    		   url:employeeContext+"logout",  
+    		   url: "/EmployeeManager/logout",  
     		   success:function(data){   			   
     			   window.location.href =employeeContext+"login";
     		   } 
     		   }); 
     		   }); 
+    	   
+    	   $('.userSuggestions').click(function(){
+    		   alert("User Suggestion event");
+    	   });
     	 });
        
        function edit()
        {
-         
-       var employeeId = $("input#employeeId").val();  
-       window.open(employeeContext+"employee/edit/"+employeeId,null,
-       "height=500,width=500,status=yes,toolbar=no,menubar=no,location=center");
+	       var employeeId = $("input#employeeId").val();  
+	       var url = employeeContext+"employee/edit/"+employeeId;
+	       window.open(url,null, "height=500,width=500,status=yes,toolbar=no,menubar=no,location=center");
        }
        
        function add()
-       {  
-       window.open(employeeContext+"employee/create",null,
-       "height=500,width=500,status=yes,toolbar=no,menubar=no,location=center");
+       { 
+    	   var url = employeeContext+"employee/create";
+    	   window.open(url,null,"height=500,width=500,status=yes,toolbar=no,menubar=no,location=center");
        }
+       
+  
 
-    	 </script>  
+
+        
+   
+       
+</script>  
+
     	 <div style="width:100%">	
     	 	<div>
     	 		<div style="float: left" >
@@ -178,16 +226,17 @@
   			<div>
   				<div id="status" class="validationmessage" style="text-align: center;"></div> 
     	 		<div  style="text-align: center;">
-					<input type="text" id="employeeId" placeholder="Search Employee" required="true" class="myinput"/>
+					<input type="text" id="employeeId" class="form-control autocomplete" placeholder="Search Employee" required="true" class="myinput"/>
 			 	 
-    	 			<button id="view" class="mybutton2">Search</button>
+    	 			<button id="userSearch" class="mybutton2">Search</button>
     			</div>
     		</div>
     	</div>
     	<div style="width:100%">
      		<div id="response" class="validationmessage"></div>
      	</div>
-     	<div style="width:100%;padding-top:200px">
+     	<div id="userSearchSuggestions" style="text-align: center;"></div>
+     	<div style="width:100%;padding-top:50px">
 			<div style="text-align: center;">
 				<button id="checkIn" class="mybutton" >Check In</button> 
 			

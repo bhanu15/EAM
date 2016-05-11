@@ -127,6 +127,8 @@
     		   url:employeeContext+"employee/"+employeeId,  
     		   success:function(data){ 
     		   $("#response").html(data); 
+    		   $("#response").show();   
+    		   $("#userSearch").hide();
     		   } 
     		   }); 
     		   }); 
@@ -170,6 +172,30 @@
     		   } 
     		   }); 
     		   }); 
+    	   
+    	   $("#employeeId").keydown( function(e) {
+    		   $("#response").hide();
+    		   $("#userSearch").show();
+    		    if(e.keyCode === 8 || e.keyCode === 46){
+    		    	 $("#response").hide();
+    		    	 $("#userSearch").show();
+    		    }
+    		    if(e.keyCode == 13){
+
+    		    	employeeId=$("input#employeeId").val();  
+    	    		$.ajax({ 
+    	    			type:"GET", 
+    	    		     url:employeeContext+"employee/"+employeeId,  
+    	    		     success:function(data){
+    	    		    	 $("#response").html(data); 
+    	    			 	 $("#response").show();  
+    	    			 	 $("#userSearch").hide();
+    	    		   	  } 
+    	    		 });      		    	
+    		    }
+    		});
+    	   
+    	
     	 });
        
        function edit()
@@ -200,16 +226,16 @@
     			</div>
   		</div>
 		
-  		<div style="width:100%;padding:75px;top:150px;padding-right:250px;padding-left:250px;">
+  		<div style="width:100%;padding:75px;top:150px;padding-right:250px;padding-left:250px;padding-bottom:20px;">
   				<div id="status" class="validationmessage" style="text-align: center;"></div> 
     	 		<div  style="text-align: center;">
 					<input type="text" id="employeeId" class="form-control autocomplete" placeholder="Search Employee" required="true" class="myinput"/>
     			</div>
     	</div>
-    	<button id="userSearch" class="mybutton2" style="width:10%;padding:10px;margin-left:625px;top:50px;">Search</button>
-    	<div style="width:100%">
+    	<div style="width:100%;padding-bottom:20px;">
      		<div id="response" class="validationmessage"></div>
      	</div>
+    	<button id="userSearch" class="mybutton2" style="width:10%;padding:10px;margin-left:625px;top:50px;">Search</button>
      	<div id="userSearchSuggestions" style="text-align: center;"></div>
      	<div style="width:100%;padding-top:50px">
 			<div style="text-align: center;">

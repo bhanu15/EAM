@@ -119,7 +119,8 @@
     		   type:"POST", 
     		   url:"/eam/checkin?employeeId="+employeeId,  
     		   success:function(data){ 
-    		   $("#status").html(data); 
+    			   alert(data);
+    		   $("#status").html(data.message); 
     		   } 
     		   }); 
     		   }); 
@@ -129,7 +130,7 @@
     		   type:"POST", 
     		   url:"/eam/checkout?employeeId="+employeeId,  
     		   success:function(data){ 
-    		   $("#status").html(data); 
+    		   $("#status").html(data.message); 
     		   } 
     		   }); 
     		   }); 

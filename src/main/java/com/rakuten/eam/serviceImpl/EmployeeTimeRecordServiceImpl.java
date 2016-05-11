@@ -7,7 +7,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.rakuten.eam.dao.EmployeeDAO;
 import com.rakuten.eam.dao.EmployeeTimeRecordDAO;
+import com.rakuten.eam.exception.EmployeeNotFoundException;
+import com.rakuten.eam.exception.LoginRecordAlreadyExistException;
 import com.rakuten.eam.model.EmployeeTimeRecordId;
 import com.rakuten.eam.model.LoginTimeRecord;
 import com.rakuten.eam.model.LogoutTimeRecord;
@@ -17,6 +20,9 @@ public class EmployeeTimeRecordServiceImpl  implements EmployeeTimeRecordService
 
 	@Autowired
 	private EmployeeTimeRecordDAO employeeTimeRecordDAO;
+	
+	@Autowired
+	private EmployeeDAO employeeDAO;
 
 	public void setEmployeeTimeRecordDAO(EmployeeTimeRecordDAO employeeTimeRecordDAO) {
 		this.employeeTimeRecordDAO = employeeTimeRecordDAO;
@@ -24,22 +30,29 @@ public class EmployeeTimeRecordServiceImpl  implements EmployeeTimeRecordService
 
 	@Override
 	@Transactional
-	public void createLoginRecord(int employeeId) {
-		if (!isEmployeeLoginTimeRecordedForToday(employeeId)){
-			LoginTimeRecord loginTimeRecord = new LoginTimeRecord(new EmployeeTimeRecordId(employeeId, getCurrentTimestamp()));
-			employeeTimeRecordDAO.createLoginTimeRecord(loginTimeRecord);
+	public boolean createLoginRecord(int employeeId) {
+		if (employeeDAO.getEmployeeById(employeeId)==null){
+			throw new EmployeeNotFoundException("Employee Not Exist");
 		}		
+		if (isEmployeeLoginTimeRecordedForToday(employeeId)){
+			throw new LoginRecordAlreadyExistException("Employee is already checked in for today");
+		}		
+		LoginTimeRecord loginTimeRecord = new LoginTimeRecord(new EmployeeTimeRecordId(employeeId, getCurrentTimestamp()));
+		return employeeTimeRecordDAO.createLoginTimeRecord(loginTimeRecord);
 	}
 
 	@Override
 	@Transactional
-	public void createLogoutRecord(int employeeId) {
+	public boolean createLogoutRecord(int employeeId) {
+		if (employeeDAO.getEmployeeById(employeeId)==null){
+			throw new EmployeeNotFoundException("Employee Not Exist");
+		}
 		LogoutTimeRecord logoutTimeRecord = new LogoutTimeRecord(new EmployeeTimeRecordId(employeeId, getCurrentTimestamp()));
 		if (!isEmployeeLogoutTimeRecordedForToday(employeeId)){
-			employeeTimeRecordDAO.createLogoutTimeRecord(logoutTimeRecord);
+			return employeeTimeRecordDAO.createLogoutTimeRecord(logoutTimeRecord);
 		}
 		else{
-			employeeTimeRecordDAO.updateLogoutTimeRecord(logoutTimeRecord);
+			return employeeTimeRecordDAO.updateLogoutTimeRecord(logoutTimeRecord);
 		}
 	}
 	

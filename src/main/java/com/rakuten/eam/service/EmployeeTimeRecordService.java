@@ -3,9 +3,9 @@ package com.rakuten.eam.service;
 
 public interface EmployeeTimeRecordService {
 
-	void createLoginRecord(int employeeId);
+	boolean createLoginRecord(int employeeId);
 
-	void createLogoutRecord(int employeeId);
+	boolean createLogoutRecord(int employeeId);
 	
 	
 	

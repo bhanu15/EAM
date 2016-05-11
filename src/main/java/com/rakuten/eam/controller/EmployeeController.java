@@ -101,7 +101,7 @@ public class EmployeeController {
 	    return new Status(false, "Employee not found");
 	  }
 	@ExceptionHandler(EmployeeAlreadyExistException.class)
-	  public Status amployeeAlreadyExistException(RuntimeException exception) {
+	  public Status employeeAlreadyExistException(RuntimeException exception) {
 	    return new Status(false, "Employee already exist");
 	  }
 }

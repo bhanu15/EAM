@@ -22,15 +22,16 @@ public class EmployeeTimeRecordDAOImpl implements  EmployeeTimeRecordDAO{
 		this.sessionFactory = sf;
 	}
 	@Override
-	public void createLoginTimeRecord(LoginTimeRecord loginTimeRecord) {
+	public boolean createLoginTimeRecord(LoginTimeRecord loginTimeRecord) {
 		Session session = this.sessionFactory.getCurrentSession();
 		session.persist(loginTimeRecord);
+		return true;
 	}
 	@Override
-	public void createLogoutTimeRecord(LogoutTimeRecord logoutTimeRecord) {
+	public boolean createLogoutTimeRecord(LogoutTimeRecord logoutTimeRecord) {
 		Session session = this.sessionFactory.getCurrentSession();
 		session.persist(logoutTimeRecord);
-		
+		return true;
 	}
 	@Override
 	public List<LoginTimeRecord> getLoginTimeRecordForToday(int employeeId){
@@ -52,11 +53,12 @@ public class EmployeeTimeRecordDAOImpl implements  EmployeeTimeRecordDAO{
 	}
 
 	@Override
-	public void updateLogoutTimeRecord(LogoutTimeRecord logoutTimeRecord) {
+	public boolean updateLogoutTimeRecord(LogoutTimeRecord logoutTimeRecord) {
 		Session session = this.sessionFactory.getCurrentSession();
 		String sql = "update employee_logout set time_captured = '"+ logoutTimeRecord.getEmployeeTimeRecordId().getTimeCaptured()+ "' WHERE employee_id = "+ logoutTimeRecord.getEmployeeTimeRecordId().getEmployeeId() + " and date(time_captured) = date(CURDATE())";
 		SQLQuery query = session.createSQLQuery(sql);	
 		query.executeUpdate();
+		return true;
 	}
 
 }

@@ -3,6 +3,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+   <link href="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.css" rel="stylesheet"/>
+<link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/css/bootstrap.css" rel="stylesheet"/>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 	<title>Welcome</title>
 	<style type="text/css">
@@ -58,47 +60,75 @@
 	  margin: 15px 15px 15px;
 	  color:  #bf0000;
 	  font-size: 14px;
-	}           
+	}
+	.form-control, .autocomplete{
+		left: 180px;
+	}
+        
+	.ui-widget{
+	left: 180px !important;
+/* 	top: 10px !important; */
+ 	} 
+	
+	
+ 	.ui-autocomplete{ 
+       left:250px !important; 
+/*        width:305px !important;  */
+   } 
 	 </style>
 </head>
 <body>
        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/jquery-ui.min.js"></script>   
-       <script>
+
+
+		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/js/bootstrap.js"></script>
+   
+      <script type="text/javascript">
+	      var employeeContext = "/EmployeeManager/";
+		   var hostName = "http://localhost:8080"+employeeContext;
+      </script>
+      <script>
        $(document).ready(function () {
-    	   $("input#employeeId").autocomplete({
-    	   source: function (request, response) {
-    	   var term = request.term;
-    	   var restUrl = "http://localhost:8080/eam/employee/search/"+term;
 
-    	   $.getJSON(restUrl, function (employees) {
-    	   var items = [];
-    	   $.each(employees, function (i, result) {                          
-    	     var item = {
-    	       label: result.firstName+" "+result.lastName+" "+result.employeeId,
-    	       value: result.employeeId
-    	       };
-
-    	       items.push(item);
-    	       });
-
-    	   
-    	       response(items);
-    	       
-    	       });
-    	     }
-    	   
+		$(".autocomplete").autocomplete({
+			source:  function(request, response){
+				  var term = request.term;
+		     	   var restUrl = hostName+"employee/search/"+term;
+		     	   var items = [];
+		     	   
+		     	  $.ajax({
+		     	        type: 'GET',
+		     	        url: restUrl,
+		     	        dataType: 'json',
+		     	        async: false ,
+		     	        success: function(employees) { 
+		     	        	 $.each(employees, function (i, result) {     
+		     	        		var item = {
+	 		  			     	    	label: result.firstName+" "+result.lastName+" "+result.employeeId,
+	 		  			     	        value: result.employeeId
+	 		  			     	       };
+		  			 			items.push(item);
+		  		     	      });
+		     	        	return items;
+		     	        },
+		     	    });
+				response( items);
+			}
     	   });
     	   
-    	   
 		      
-    	   $("#view").click(function(){ 
+    	   $("#userSearch").click(function(){ 
     		   employeeId=$("input#employeeId").val();  
     		   $.ajax({ 
     		   type:"GET", 
-    		   url:"/eam/employee/"+employeeId,  
+    		   url:employeeContext+"employee/"+employeeId,  
     		   success:function(data){ 
     		   $("#response").html(data); 
+    		   $("#response").show();   
+    		   $("#userSearch").hide();
     		   } 
     		   }); 
     		   }); 
@@ -107,7 +137,7 @@
     		   employeeId=$("input#employeeId").val();  
     		   $.ajax({ 
     		   type:"DELETE", 
-    		   url:"/eam/employee/delete/"+employeeId,  
+    		   url:employeeContext+"employee/delete/"+employeeId,  
     		   success:function(data){ 
     		   $("#status").html(data.message); 
     		   } 
@@ -117,10 +147,10 @@
     		   employeeId=$("input#employeeId").val();  
     		   $.ajax({ 
     		   type:"POST", 
-    		   url:"/eam/checkin?employeeId="+employeeId,  
+    		   url:employeeContext+"checkin?employeeId="+employeeId,  
     		   success:function(data){ 
-    			   alert(data);
-    		   $("#status").html(data.message); 
+//     		   $("#status").html(data); 
+    		   		("#status").html(data.message); 
     		   } 
     		   }); 
     		   }); 
@@ -128,66 +158,88 @@
     		   employeeId=$("input#employeeId").val();  
     		   $.ajax({ 
     		   type:"POST", 
-    		   url:"/eam/checkout?employeeId="+employeeId,  
+    		   url:employeeContext+"checkout?employeeId="+employeeId,  
     		   success:function(data){ 
-    		   $("#status").html(data.message); 
+//     		   $("#status").html(data.message); 
+    		   		$("#status").html(data.message); 
     		   } 
     		   }); 
     		   }); 
     	   $("#logout").click(function(){   
     		   $.ajax({ 
     		   type:"POST", 
-    		   url:"/eam/logout",  
+    		   url: "/EmployeeManager/logout",  
     		   success:function(data){   			   
-    			   window.location.href ="/eam/login";
+    			   window.location.href =employeeContext+"login";
     		   } 
     		   }); 
     		   }); 
+    	   
+    	   $("#employeeId").keydown( function(e) {
+    		   $("#response").hide();
+    		   $("#userSearch").show();
+    		    if(e.keyCode === 8 || e.keyCode === 46){
+    		    	 $("#response").hide();
+    		    	 $("#userSearch").show();
+    		    }
+    		    if(e.keyCode == 13){
+
+    		    	employeeId=$("input#employeeId").val();  
+    	    		$.ajax({ 
+    	    			type:"GET", 
+    	    		     url:employeeContext+"employee/"+employeeId,  
+    	    		     success:function(data){
+    	    		    	 $("#response").html(data); 
+    	    			 	 $("#response").show();  
+    	    			 	 $("#userSearch").hide();
+    	    		   	  } 
+    	    		 });      		    	
+    		    }
+    		});
+    	   
+    	
     	 });
        
        function edit()
        {
-         
-       var employeeId = $("input#employeeId").val();  
-       window.open("/eam/employee/edit/"+employeeId,null,
-       "height=500,width=500,status=yes,toolbar=no,menubar=no,location=center");
+	       var employeeId = $("input#employeeId").val();  
+	       var url = employeeContext+"employee/edit/"+employeeId;
+	       window.open(url,null, "height=500,width=500,status=yes,toolbar=no,menubar=no,location=center");
        }
        
        function add()
-       {  
-       window.open("/eam/employee/create",null,
-       "height=500,width=500,status=yes,toolbar=no,menubar=no,location=center");
+       { 
+    	   var url = employeeContext+"employee/create";
+    	   window.open(url,null,"height=500,width=500,status=yes,toolbar=no,menubar=no,location=center");
        }
+       
+</script>  
 
-    	 </script>  
-    	 <div style="width:100%">	
-    	 	<div>
-    	 		<div style="float: left" >
+    	 <div  id="temp" style="width:100%;top:150px;padding-top:50px;">	
+    	 		<div style="float: left;padding-left:50px;" >
 					<button id="add" onclick="add()" class="mybutton2" >Add Employee</button>
 		
 					<button id="edit" onclick="edit()" class="mybutton2">Edit Employee</button>  
 		
 					<button id="delete" class="mybutton2">Delete Employee</button> 
 				</div>
-				<div style="float: right">
+				<div style="float: right;padding-right:50px;">
 					<button id="logout" class="mybutton2">Logout</button> 
     			</div>
-  			</div>
   		</div>
-  		<div style="width:100%;padding:50px">
-  			<div>
+		
+  		<div style="width:100%;padding:75px;top:150px;padding-right:250px;padding-left:250px;padding-bottom:20px;">
   				<div id="status" class="validationmessage" style="text-align: center;"></div> 
     	 		<div  style="text-align: center;">
-					<input type="text" id="employeeId" placeholder="Search Employee" required="true" class="myinput"/>
-			 	 
-    	 			<button id="view" class="mybutton2">Search</button>
+					<input type="text" id="employeeId" class="form-control autocomplete" placeholder="Search Employee" required="true" class="myinput"/>
     			</div>
-    		</div>
     	</div>
-    	<div style="width:100%">
+    	<div style="width:100%;padding-bottom:20px;">
      		<div id="response" class="validationmessage"></div>
      	</div>
-     	<div style="width:100%;padding-top:200px">
+    	<button id="userSearch" class="mybutton2" style="width:10%;padding:10px;margin-left:625px;top:50px;">Search</button>
+     	<div id="userSearchSuggestions" style="text-align: center;"></div>
+     	<div style="width:100%;padding-top:50px">
 			<div style="text-align: center;">
 				<button id="checkIn" class="mybutton" >Check In</button> 
 			

@@ -12,6 +12,7 @@
 			<th>Employee Id</th>
 			<td>${employee.employeeId}</td>
 		</tr>
+	
 		<tr>
 			<th>First Name</th>
 			<td>${employee.firstName}</td>

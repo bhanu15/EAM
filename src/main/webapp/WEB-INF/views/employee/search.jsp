@@ -87,7 +87,7 @@
 		<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/js/bootstrap.js"></script>
    
       <script type="text/javascript">
-	      var employeeContext = "/EmployeeManager/";
+	      var employeeContext = "/eam/";
 		   var hostName = "http://localhost:8080"+employeeContext;
       </script>
       <script>
@@ -150,7 +150,9 @@
     		   url:employeeContext+"checkin?employeeId="+employeeId,  
     		   success:function(data){ 
 //     		   $("#status").html(data); 
-    		   		("#status").html(data.message); 
+    		   		$("#status").html(data.message); 
+    		   	 $("#status").show();
+    		   		
     		   } 
     		   }); 
     		   }); 
@@ -162,13 +164,14 @@
     		   success:function(data){ 
 //     		   $("#status").html(data.message); 
     		   		$("#status").html(data.message); 
+    		   	 $("#status").show();
     		   } 
     		   }); 
     		   }); 
     	   $("#logout").click(function(){   
     		   $.ajax({ 
     		   type:"POST", 
-    		   url: "/EmployeeManager/logout",  
+    		   url: employeeContext+"logout",  
     		   success:function(data){   			   
     			   window.location.href =employeeContext+"login";
     		   } 
@@ -176,6 +179,7 @@
     		   }); 
     	   
     	   $("#employeeId").keydown( function(e) {
+    		   $("#status").hide();
     		   $("#response").hide();
     		   $("#userSearch").show();
     		    if(e.keyCode === 8 || e.keyCode === 46){

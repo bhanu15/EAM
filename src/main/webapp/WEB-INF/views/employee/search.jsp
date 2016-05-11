@@ -149,7 +149,8 @@
     		   type:"POST", 
     		   url:employeeContext+"checkin?employeeId="+employeeId,  
     		   success:function(data){ 
-    		   $("#status").html(data); 
+//     		   $("#status").html(data); 
+    		   		("#status").html(data.message); 
     		   } 
     		   }); 
     		   }); 
@@ -159,7 +160,8 @@
     		   type:"POST", 
     		   url:employeeContext+"checkout?employeeId="+employeeId,  
     		   success:function(data){ 
-    		   $("#status").html(data); 
+//     		   $("#status").html(data.message); 
+    		   		$("#status").html(data.message); 
     		   } 
     		   }); 
     		   }); 

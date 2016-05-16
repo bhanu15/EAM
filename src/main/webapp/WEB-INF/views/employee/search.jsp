@@ -75,11 +75,13 @@
         
 	.ui-widget{
 	left: 180px !important;
+/* 	top: 10px !important; */
  	} 
 	
 	
  	.ui-autocomplete{ 
        left:250px !important; 
+/*        width:305px !important;  */
    } 
    
        .layer
@@ -180,37 +182,22 @@
     		   employeeId=$("input#employeeId").val();  
     		   $.ajax({ 
     		   type:"POST", 
-<<<<<<< HEAD
     		   url:employeeContext+"checkin?employeeId="+employeeId,  
     		   success:function(data){  
     		   	$("#status").html(data.message); 
     		   	$("#status").show();
     		   		
     		   } 
-=======
-    		   url: employeeContext+"checkin?employeeId="+employeeId,  
-    		   success:function(data){
-			 		$("#status").html(data.message);
-			 		$("#status").show(); 
-    		   }
-    		   
->>>>>>> branch 'master' of https://github.com/simpijain/EAM.git
     		   }); 
     		   }); 
-    	   
     	   $("#checkOut").click(function(){ 
     		   employeeId=$("input#employeeId").val();  
     		   $.ajax({ 
     		   type:"POST", 
     		   url:employeeContext+"checkout?employeeId="+employeeId,  
     		   success:function(data){ 
-<<<<<<< HEAD
     		   	$("#status").html(data.message); 
     		   	$("#status").show();
-=======
-    				$("#status").html(data.message); 
-    				$("#status").show(); 
->>>>>>> branch 'master' of https://github.com/simpijain/EAM.git
     		   } 
     		   }); 
     		   }); 
@@ -231,13 +218,7 @@
 		       $("#checkOut").prop( "disabled", true );
     		   $("#status").hide();
     		   $("#response").hide();
-<<<<<<< HEAD
     		  
-=======
-    		   $("#userSearch").show();
-    		   $("#status").show();
-    		   $("#status").hide();
->>>>>>> branch 'master' of https://github.com/simpijain/EAM.git
     		    if(e.keyCode === 8 || e.keyCode === 46){
     		    	 $("#response").hide();
     		    	 

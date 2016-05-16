@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.rakuten.eam.dao.EmployeeTimeRecordDAO;
 import com.rakuten.eam.exception.CheckInCheckOutReportException;
-import com.rakuten.eam.exception.EmployeeNotFoundException;
 import com.rakuten.eam.model.LoginTimeRecord;
 import com.rakuten.eam.model.LogoutTimeRecord;
 import com.rakuten.eam.pojo.CheckInCheckOutReport;
@@ -79,13 +78,17 @@ public class EmployeeTimeRecordDAOImpl implements  EmployeeTimeRecordDAO{
 						+ employeeId)
 				.list();
 		
+		if(checkInCheckOutRecords.isEmpty()){
+			throw new CheckInCheckOutReportException("No Records found for employee Id : "+employeeId);
+		}
+		
 		List<CheckInCheckOutReport> checkInCheckOutReports = new ArrayList<CheckInCheckOutReport>();
 		
 		for (Object checkInCheckOutEntry[] : checkInCheckOutRecords) {
 
 			CheckInCheckOutReport checkInCheckOutReport = new CheckInCheckOutReport();
 			checkInCheckOutReport.setEmployeeId((Integer) checkInCheckOutEntry[0]);
-			System.out.println("Bhanu ##########getLoginLogoutTimeRecordForEmployee ###### checkInCheckOutEntry"+checkInCheckOutEntry[0]);
+
 			if(checkInCheckOutEntry[0] != null){
 			Timestamp checkInTime = (Timestamp) checkInCheckOutEntry[1];
 			Timestamp checkOutTime = (Timestamp) checkInCheckOutEntry[2];

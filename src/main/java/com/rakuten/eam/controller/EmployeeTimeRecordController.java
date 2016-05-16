@@ -59,10 +59,6 @@ public class EmployeeTimeRecordController {
 			@PathVariable("employeeId") int employeeId) {
 
 		List<CheckInCheckOutReport> checkInCheckOutRecords = employeeTimeRecordService.generateCheckInCheckOutReport(employeeId);
-		
-		if(checkInCheckOutRecords.isEmpty()){
-			throw new CheckInCheckOutReportException("No records found for Employee Id :: "+employeeId);
-		}
 		return checkInCheckOutRecords;
 	}
 	
@@ -75,8 +71,6 @@ public class EmployeeTimeRecordController {
 	  public Status employeeNotFoundException(RuntimeException exception) {
 	    return new Status(false, "Employee not found");
 	  }
-
-	
 
 	@ExceptionHandler(CheckInCheckOutReportException.class)
 	public Status checkInCheckOutReportGenerationException(

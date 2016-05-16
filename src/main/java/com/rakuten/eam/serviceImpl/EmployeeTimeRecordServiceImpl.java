@@ -66,9 +66,6 @@ public class EmployeeTimeRecordServiceImpl  implements EmployeeTimeRecordService
 			throw new EmployeeNotFoundException("Employee Not Exist");
 		}
 		List<CheckInCheckOutReport> checkInCheckOutReports = employeeTimeRecordDAO.getLoginLogoutTimeRecordForEmployee(employeeId);
-		if(checkInCheckOutReports.isEmpty()){
-			throw new CheckInCheckOutReportException("No Records found for employee "+employeeId);
-		}
 		return checkInCheckOutReports;
 	}
 	

@@ -4,35 +4,42 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Employee Details</title>
+<style type="text/css">
+	
+	.center-align{
+	padding:5px;
+	align = center;
+	}
+	 </style>
 </head>
 <body> 
 <table border="1" align="center" >
 	
 		<tr>
-			<th>Employee Id</th>
-			<td>${employee.employeeId}</td>
+			<th class = "center-align">Employee Id</th>
+			<td class = "center-align">${employee.employeeId}</td>
 		</tr>
 	
 		<tr>
-			<th>First Name</th>
-			<td>${employee.firstName}</td>
+			<th class = "center-align">First Name</th>
+			<td class = "center-align">${employee.firstName}</td>
 		</tr>
 		<tr>
-			<th>Last Name</th>
-			<td>${employee.lastName}</td>
+			<th class = "center-align">Last Name</th>
+			<td class = "center-align">${employee.lastName}</td>
 		</tr>
 	
 		<tr>
-			<th>Nick Name</th>
-			<td>${employee.nickName}</td>
+			<th class = "center-align">Nick Name</th>
+			<td class = "center-align">${employee.nickName}</td>
 		</tr>	
 		<tr>
-			<th>Email</th>
-			<td>${employee.emailId}</td>
+			<th class = "center-align">Email</th>
+			<td class = "center-align">${employee.emailId}</td>
 		</tr>
 		<tr>
-			<th>Department</th>
-			<td>${employee.department}</td>
+			<th class = "center-align">Department</th>
+			<td class = "center-align">${employee.department}</td>
 		</tr>
 
 </table> 

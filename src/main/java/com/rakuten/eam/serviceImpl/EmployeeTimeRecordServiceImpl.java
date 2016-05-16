@@ -9,11 +9,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.rakuten.eam.dao.EmployeeDAO;
 import com.rakuten.eam.dao.EmployeeTimeRecordDAO;
+import com.rakuten.eam.exception.CheckInCheckOutReportException;
 import com.rakuten.eam.exception.EmployeeNotFoundException;
 import com.rakuten.eam.exception.LoginRecordAlreadyExistException;
 import com.rakuten.eam.model.EmployeeTimeRecordId;
 import com.rakuten.eam.model.LoginTimeRecord;
 import com.rakuten.eam.model.LogoutTimeRecord;
+import com.rakuten.eam.pojo.CheckInCheckOutReport;
 import com.rakuten.eam.service.EmployeeTimeRecordService;
 
 public class EmployeeTimeRecordServiceImpl  implements EmployeeTimeRecordService {
@@ -54,6 +56,20 @@ public class EmployeeTimeRecordServiceImpl  implements EmployeeTimeRecordService
 		else{
 			return employeeTimeRecordDAO.updateLogoutTimeRecord(logoutTimeRecord);
 		}
+	}
+	
+	@Override
+	@Transactional
+	public List<CheckInCheckOutReport> generateCheckInCheckOutReport(int employeeId){
+			
+		if (employeeDAO.getEmployeeById(employeeId)==null){
+			throw new EmployeeNotFoundException("Employee Not Exist");
+		}
+		List<CheckInCheckOutReport> checkInCheckOutReports = employeeTimeRecordDAO.getLoginLogoutTimeRecordForEmployee(employeeId);
+		if(checkInCheckOutReports.isEmpty()){
+			throw new CheckInCheckOutReportException("No Records found for employee "+employeeId);
+		}
+		return checkInCheckOutReports;
 	}
 	
 	public boolean isEmployeeLoginTimeRecordedForToday(int employeeId){

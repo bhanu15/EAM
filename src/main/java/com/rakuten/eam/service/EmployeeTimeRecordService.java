@@ -1,5 +1,8 @@
 package com.rakuten.eam.service;
 
+import java.util.List;
+
+import com.rakuten.eam.pojo.CheckInCheckOutReport;
 
 public interface EmployeeTimeRecordService {
 
@@ -7,8 +10,7 @@ public interface EmployeeTimeRecordService {
 
 	boolean createLogoutRecord(int employeeId);
 	
-	
-	
+	List<CheckInCheckOutReport> generateCheckInCheckOutReport(int employeeId);
 
 }
 

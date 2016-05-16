@@ -111,7 +111,7 @@
 		<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/js/bootstrap.js"></script>
    
       <script type="text/javascript">
-	      var employeeContext = "/eam/";
+	      var employeeContext = "/EmployeeManager/";
 		   var hostName = "http://localhost:8080"+employeeContext;
       </script>
       <script>
@@ -161,7 +161,8 @@
    		    		$("#edit").removeAttr("disabled");  
    		    		$("#delete").removeAttr("disabled");  
    		    		$("#checkIn").removeAttr( "disabled");
-   			       $("#checkOut").removeAttr( "disabled");
+   			        $("#checkOut").removeAttr( "disabled");
+   			   		$("#report").removeAttr( "disabled");
     		   } }
     		   }); 
     		   }); 
@@ -216,6 +217,7 @@
 		       $("#delete").prop( "disabled", true );
 		       $("#checkIn").prop( "disabled", true );
 		       $("#checkOut").prop( "disabled", true );
+		       $("#report").prop( "disabled", true );
     		   $("#status").hide();
     		   $("#response").hide();
     		  
@@ -242,6 +244,7 @@
     	    	   		    		$("#delete").removeAttr("disabled");  
     	    	   		    		$("#checkIn").removeAttr( "disabled");
     	    	   			       $("#checkOut").removeAttr( "disabled");
+    	    	   			       $("#report").removeAttr( "disabled");
     	    	    		   }
     	    			 	
     	    		   	  } 
@@ -249,6 +252,33 @@
     		    }
     		});
     	   
+    	   $("#report").click(function(){
+     		  
+    		   var employeeId = $("input#employeeId").val();  
+
+    		   var generateReportURL = employeeContext+"generateReport/"+employeeId;
+    		   
+    		   $.ajax({ 
+    		   type:"GET", 
+    		   dataType: 'json',
+    		   url: generateReportURL,  
+    		   success:function(employeeReport){ 
+    			   var content = "<table border='3' align='center' style='margin-top:50px;'>";
+    			   content += "<tr bgcolor='#bf0000'><td>" + "Employee Id </td><td> CheckIn Time  </td><td> CheckOut Time </td><td>Total Time Clocked </td></tr>";
+    			   $.each(employeeReport, function (i, result) {     
+ 			 			
+ 			 			content += "<tr><td style='padding:5px;'align='center'>" + result.employeeId + "</td><td style='padding:5px;'align='center'>"+result.checkInTime +"</td><td style='padding:5px;'align='center'> "+result.checkOutTime+"</td><td style='padding:5px;'align='center'> "+result.timeClocked+"</td></tr>";   
+    			   });
+    			  
+    			   content += "</table>";
+				   var w = window.open();
+				   $(w.document.body).html(content);
+					   
+    		   }
+    		   
+    		   }); 
+    		   
+    	   });
     	
     	 });
        
@@ -296,6 +326,7 @@
 					<button id="edit" onclick="edit()" class="mybutton2" disabled="disabled">Edit Employee</button>  
 		
 					<button id="delete" class="mybutton2" disabled="disabled">Delete Employee</button> 
+					<button id="report" class="mybutton2" disabled="disabled">Employee Attendance Report</button> 
 				</div>
 				<%}%>
 				<div style="float: right;padding-right:50px;">

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
        pageEncoding="ISO-8859-1"%>
+<%@ page import="com.rakuten.eam.model.User" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -39,9 +40,16 @@
 	.mybutton2:hover,.mybutton2:active,.mybutton2:focus {
 	  background: grey;
 	}	
+	.mybutton2:disabled{
+		background: lightgrey;
+	}
 	
 	.mybutton:hover,.mybutton2:active,.mybutton2:focus {
 	  background: grey;
+	}
+	
+	.mybutton:disabled{
+		background: lightgrey;
 	}
 			
 	.myinput {
@@ -75,9 +83,25 @@
        left:250px !important; 
 /*        width:305px !important;  */
    } 
+   
+       .layer
+  {
+        position: fixed;
+        opacity: 0.7;
+        left: 0px;
+        top: 0px;
+        width: 100%;
+        height: 100%;
+        z-index: 999999;
+        background-color: #BEBEBE;
+        display: none;
+        cursor: not-allowed;
+  }
 	 </style>
 </head>
 <body>
+		
+		<div class="layer" id="layout"></div>
        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/jquery-ui.min.js"></script>   
 
@@ -92,7 +116,7 @@
       </script>
       <script>
        $(document).ready(function () {
-
+    	   
 		$(".autocomplete").autocomplete({
 			source:  function(request, response){
 				  var term = request.term;
@@ -126,10 +150,19 @@
     		   type:"GET", 
     		   url:employeeContext+"employee/"+employeeId,  
     		   success:function(data){ 
-    		   $("#response").html(data); 
-    		   $("#response").show();   
-    		   $("#userSearch").hide();
-    		   } 
+   			   if(typeof data =='object')
+   			   {
+   				   $("#status").html(data.message);
+     		       $("#status").show();
+   			   }  		             		        		       
+    		   else{
+   		    		$("#response").html(data);
+   		    		$("#response").show();	
+   		    		$("#edit").removeAttr("disabled");  
+   		    		$("#delete").removeAttr("disabled");  
+   		    		$("#checkIn").removeAttr( "disabled");
+   			       $("#checkOut").removeAttr( "disabled");
+    		   } }
     		   }); 
     		   }); 
     	   
@@ -139,7 +172,9 @@
     		   type:"DELETE", 
     		   url:employeeContext+"employee/delete/"+employeeId,  
     		   success:function(data){ 
-    		   $("#status").html(data.message); 
+    		   $("#status").html(data.message);
+    		   $("#status").show();
+    		   
     		   } 
     		   }); 
     		   }); 
@@ -148,10 +183,9 @@
     		   $.ajax({ 
     		   type:"POST", 
     		   url:employeeContext+"checkin?employeeId="+employeeId,  
-    		   success:function(data){ 
-//     		   $("#status").html(data); 
-    		   		$("#status").html(data.message); 
-    		   	 $("#status").show();
+    		   success:function(data){  
+    		   	$("#status").html(data.message); 
+    		   	$("#status").show();
     		   		
     		   } 
     		   }); 
@@ -162,9 +196,8 @@
     		   type:"POST", 
     		   url:employeeContext+"checkout?employeeId="+employeeId,  
     		   success:function(data){ 
-//     		   $("#status").html(data.message); 
-    		   		$("#status").html(data.message); 
-    		   	 $("#status").show();
+    		   	$("#status").html(data.message); 
+    		   	$("#status").show();
     		   } 
     		   }); 
     		   }); 
@@ -179,12 +212,16 @@
     		   }); 
     	   
     	   $("#employeeId").keydown( function(e) {
+    		   $("#edit").prop( "disabled", true );
+		       $("#delete").prop( "disabled", true );
+		       $("#checkIn").prop( "disabled", true );
+		       $("#checkOut").prop( "disabled", true );
     		   $("#status").hide();
     		   $("#response").hide();
-    		   $("#userSearch").show();
+    		  
     		    if(e.keyCode === 8 || e.keyCode === 46){
     		    	 $("#response").hide();
-    		    	 $("#userSearch").show();
+    		    	 
     		    }
     		    if(e.keyCode == 13){
 
@@ -192,10 +229,21 @@
     	    		$.ajax({ 
     	    			type:"GET", 
     	    		     url:employeeContext+"employee/"+employeeId,  
-    	    		     success:function(data){
-    	    		    	 $("#response").html(data); 
-    	    			 	 $("#response").show();  
-    	    			 	 $("#userSearch").hide();
+    	    		     success:function(data){ 
+    	    			 	if(typeof data =='object')
+    	    	   			   {
+    	    	   				   $("#status").html(data.message);
+    	    	     		       $("#status").show();
+    	    	   			   }  		             		        		       
+    	    	    		   else{
+    	    	   		    		$("#response").html(data);
+    	    	   		    		$("#response").show();	
+    	    	   		    		$("#edit").removeAttr("disabled");  
+    	    	   		    		$("#delete").removeAttr("disabled");  
+    	    	   		    		$("#checkIn").removeAttr( "disabled");
+    	    	   			       $("#checkOut").removeAttr( "disabled");
+    	    	    		   }
+    	    			 	
     	    		   	  } 
     	    		 });      		    	
     		    }
@@ -204,29 +252,52 @@
     	
     	 });
        
+       $(".layout").click(function(e) {
+           new_window.focus();
+       
+   		});
+       
        function edit()
        {
+    	   var w=400;
+    	   var h=500;
+    	   var left = (screen.width/2)-(w/2);
+    	   var top = (screen.height/2)-(h/2);
 	       var employeeId = $("input#employeeId").val();  
 	       var url = employeeContext+"employee/edit/"+employeeId;
-	       window.open(url,null, "height=500,width=500,status=yes,toolbar=no,menubar=no,location=center");
+	       $(".layer").show();
+	       new_window = window.open(url,null, "height="+h+",width="+w+",left="+left+",top="+top+",status=yes,toolbar=no,menubar=no,location=center");
        }
        
        function add()
        { 
+    	   var w=400;
+    	   var h=500;
+    	   var left = (screen.width/2)-(w/2);
+    	   var top = (screen.height/2)-(h/2);
     	   var url = employeeContext+"employee/create";
-    	   window.open(url,null,"height=500,width=500,status=yes,toolbar=no,menubar=no,location=center");
+    	   $(".layer").show();
+    	   new_window = window.open(url,null, "height="+h+",width="+w+",left="+left+",top="+top+",status=yes,toolbar=no,menubar=no,location=center"); 
        }
        
+       
+       
+       
 </script>  
-
-    	 <div  id="temp" style="width:100%;top:150px;padding-top:50px;">	
+		
+    	 <div  id="temp" style="width:100%;top:150px;padding-top:50px;">
+    	 		<%
+				if (session.getAttribute("user")!=null && "admin".equalsIgnoreCase(((User)session.getAttribute("user")).getUserName())){
+				%>	
     	 		<div style="float: left;padding-left:50px;" >
+    	 		
 					<button id="add" onclick="add()" class="mybutton2" >Add Employee</button>
 		
-					<button id="edit" onclick="edit()" class="mybutton2">Edit Employee</button>  
+					<button id="edit" onclick="edit()" class="mybutton2" disabled="disabled">Edit Employee</button>  
 		
-					<button id="delete" class="mybutton2">Delete Employee</button> 
+					<button id="delete" class="mybutton2" disabled="disabled">Delete Employee</button> 
 				</div>
+				<%}%>
 				<div style="float: right;padding-right:50px;">
 					<button id="logout" class="mybutton2">Logout</button> 
     			</div>
@@ -245,12 +316,11 @@
      	<div id="userSearchSuggestions" style="text-align: center;"></div>
      	<div style="width:100%;padding-top:50px">
 			<div style="text-align: center;">
-				<button id="checkIn" class="mybutton" >Check In</button> 
+				<button id="checkIn" class="mybutton" disabled="disabled">Check In</button> 
 			
-				<button id="checkOut" class="mybutton" >Check Out</button>
+				<button id="checkOut" class="mybutton" disabled="disabled">Check Out</button>
 			</div>
 		</div>
-		
+		</div>
     </body>
 </html>
-       

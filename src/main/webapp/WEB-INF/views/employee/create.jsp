@@ -4,6 +4,56 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+        <style>
+	.form-page {
+	  width: 400px;
+	  padding: 8% 0 0;
+	  margin: auto;
+	}
+	
+	.form input {
+	  font-family: "Roboto", sans-serif;
+	  outline: 0;
+	  background: #f2f2f2;
+	  border: 0;
+	  margin:2px;
+	  padding: 5px;
+	  box-sizing: border-box;
+	  font-size: 14px;
+	}
+	.form button {
+	  font-family: "Roboto", sans-serif;
+	  text-transform: uppercase;
+	  outline: 0;
+	  background: #bf0000;
+	  width: 20%;
+	  border: 0;
+	  padding: 4px;
+	  color: #f2f2f2;
+	  font-size: 14px;
+	  -webkit-transition: all 0.3 ease;
+	  transition: all 0.3 ease;
+	  cursor: pointer;
+	   margin:15px;
+	}
+	.form button:hover,.form button:active,.form button:focus {
+	  background: grey;
+	}
+	.form label {
+	  font-family: "Roboto", sans-serif;
+	  margin: 15px 15px 15px;
+	  font-size: 14px;
+	}
+	
+	.message {
+	  font-family: "Roboto", sans-serif;
+	  color: #bf0000;
+	  margin: 15px 15px 15px;
+	  font-size: 14px;
+	}
+
+
+	</style>
         <title>Create Employee</title>
     </head>
     <body>
@@ -11,38 +61,175 @@
 
 	       <script>
 	       $(document).ready(function(){
+	    	   
 		       $("#save").click(function(){
-		    	   var str = $("#createEmployeeForm").serialize();
-		    	  
-		    	    $.ajax({type: "POST", 
-		    	    	data: str,
-		    	    	url: "create", 
-		    	    	success: function(data){
-		    	    		$("#status").html(data.message); 
-		    	    }});
-		    	});
+		    	   var employeeId = $("#employeeId").val();
+		    	   var userEmail = $("#emailId").val();
+                   var phoneNumber = $("#phoneNumber").val();
+                   
+                   var validate = true;
+                   
+                   var validationMessage="";
+                   
+                   if(!isEmployeeId(employeeId)){
+                       validate = false;                  
+                       $("#employeeId").css("background-color","#bf0000");
+                       validationMessage = validationMessage+"Employee Id is required and should contain only numbers. <br>";
+                      
+	                }
+	                else{
+	             	                      
+	                     $("#employeeId").css("background-color","#f2f2f2");
+	                 
+	                }
+                   
+                   if(!isEmail(userEmail)){
+                          validate = false;                  
+                          $("#emailId").css("background-color","#bf0000");
+                         
+                          validationMessage = validationMessage+"Email should be in correct format. <br>";
+                   }
+                   else{
+                	                    
+                        $("#emailId").css("background-color","#f2f2f2");
+                       
+                   }
+                   if(!validatePhone(phoneNumber)){
+                          validate = false;
+                          $("#phoneNumber").css("background-color","#bf0000");
+                         
+                          validationMessage = validationMessage+"Phone number should contain only 10 digits. <br>";
+                   }
+                   else{
+                	   $("#phoneNumber").css("background-color","#f2f2f2");
+                                      
+                   }
+                   if(validate == false){
+                	   $("#status").html(validationMessage); 
+                   }
+                   else{
+	    				      
+				    	   var str = $("#createEmployeeForm").serialize();
+				    	  
+				    	    $.ajax({type: "POST", 
+				    	    	data: str,
+				    	    	url: "create", 
+				    	    	success: function(data){
+				    	    		$("#status").html(data.message); 
+				    	    }});
+				       }
+				       
+		    		});
+		       
+                
 	       });
 
+		       function isEmail(email) {
+	               var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+	               return email==null || email=="" ||regex.test(email);
+	          }
+	          
+	          function validatePhone(phoneNumber) {
+	             var filter =  /^\d{10}$/; 
+	             if (phoneNumber==null || phoneNumber=="" || filter.test(phoneNumber)) {
+	             return true;
+	             }
+	             else {
+	             return false;
+	             }
+	          }
+		       
+		   
+	       function submit(){
+	           var doc = window.opener.document;
+	           doc.getElementById("layout").style.display="none";
+	           window.close();
+	       }   
+
+	      window.onbeforeunload = function(){
+	           var doc = window.opener.document;
+	           doc.getElementById("layout").style.display="none";
+	      }
+	      
+	      function isEmployeeId(str) {
+	    	  	if (str==null || str==""){
+	    	  		return false;
+	    	  	}
+	    	    var n = ~~Number(str);
+	    	    return String(n) === str && n >= 0;
+	    	    return false;
+	    	}
+	      
 	       </script>
     
+        <div class="form-page">
+    <div class="form">
+    
         <form:form id="createEmployeeForm">
-        	<div id="status"></div>
-        	<label>Employee Id</label>
-            <input id="employeeId" name="employeeId"/><br>
+        <div id="status" class="message"></div>
+        <table width="400px">
+        <tr  align="left">
+        	<td>
+        		<label>Employee Id</label>
+        	</td>
+        	<td>
+            	<input id="employeeId" name="employeeId" required="true"/><br>
+            </td>
+        </tr >
+        <tr  align="left">
+        	<td>
             <label>First Name</label>
-            <input id="firstName" name="firstName"  /><br>
+            </td>
+        	<td>
+            <input id="firstName" name="firstName"/><br>
+       		</td>
+        </tr>
+         <tr  align="left">
+        	<td>
             <label>Last Name</label>
+            </td>
+        	<td>
             <input id="lastName" name="lastName"/><br>
-            <label>Nick Name</label>
-            <input id="nickName" name="nickName" /><br>
-            <label>Email Id</label>  
-            <input id="emailId" name="emailId" /><br>
-            <label>Department</label>        
+            </td>
+        </tr>
+        <tr  align="left">
+        	<td>
+            	<label>Nick Name</label>
+            </td>
+        	<td>
+            <input id="nickName" name="nickName"/><br>
+            </td>
+        </tr>
+             <tr  align="left">
+        	<td>
+            <label>Email Id</label>
+            </td>
+        	<td>  
+            <input id="emailId" name="emailId"/><br>
+            </td>
+        </tr>
+             <tr  align="left">
+        	<td>
+            <label>Department</label>   
+            </td>
+        	<td>     
             <input id="department" name="department"/><br>
+            </td>
+        </tr>
+             <tr  align="left">
+        	<td>
             <label>Phone Number</label>
+            </td>
+        	<td>
             <input id="phoneNumber" name="phoneNumber"/><br>
+            </td>
+        </tr>
             
+         </table>
         </form:form>
         <button id="save">save</button>
+       
+    </div>
+    </div>
     </body>
 </html>

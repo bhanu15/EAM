@@ -58,12 +58,12 @@ public class EmployeeTimeRecordController {
 	public @ResponseBody List<CheckInCheckOutReport> generateCheckInCheckOutReport(
 			@PathVariable("employeeId") int employeeId) {
 
-		List<CheckInCheckOutReport> list = employeeTimeRecordService.generateCheckInCheckOutReport(employeeId);
+		List<CheckInCheckOutReport> checkInCheckOutRecords = employeeTimeRecordService.generateCheckInCheckOutReport(employeeId);
 		
-		for (CheckInCheckOutReport checkInCheckOutReport : list) {
-			System.out.println(checkInCheckOutReport);
+		if(checkInCheckOutRecords.isEmpty()){
+			throw new CheckInCheckOutReportException("No records found for Employee Id :: "+employeeId);
 		}
-		return list;
+		return checkInCheckOutRecords;
 	}
 	
 	@ExceptionHandler(LoginRecordAlreadyExistException.class)

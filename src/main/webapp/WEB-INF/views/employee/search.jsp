@@ -262,17 +262,23 @@
     		   type:"GET", 
     		   dataType: 'json',
     		   url: generateReportURL,  
-    		   success:function(employeeReport){ 
-    			   var content = "<table border='3' align='center' style='margin-top:50px;'>";
-    			   content += "<tr bgcolor='#bf0000'><td>" + "Employee Id </td><td> CheckIn Time  </td><td> CheckOut Time </td><td>Total Time Clocked </td></tr>";
-    			   $.each(employeeReport, function (i, result) {     
- 			 			
- 			 			content += "<tr><td style='padding:5px;'align='center'>" + result.employeeId + "</td><td style='padding:5px;'align='center'>"+result.checkInTime +"</td><td style='padding:5px;'align='center'> "+result.checkOutTime+"</td><td style='padding:5px;'align='center'> "+result.timeClocked+"</td></tr>";   
-    			   });
-    			  
-    			   content += "</table>";
-				   var w = window.open();
-				   $(w.document.body).html(content);
+    		   success: function( employeeReport ){ 
+    			   if(employeeReport.success == false){
+    				   $("#status").html(employeeReport.message);
+	     		       $("#status").show();
+	     		       
+    			   }else{
+	    			   var content = "<table border='3' align='center' style='margin-top:50px;'>";
+	    			   content += "<tr bgcolor='#bf0000'><td>" + "Employee Id </td><td> CheckIn Time  </td><td> CheckOut Time </td><td>Total Time Clocked </td></tr>";
+	    			   $.each(employeeReport, function (i, result) {     
+	 			 			
+	 			 			content += "<tr><td style='padding:5px;'align='center'>" + result.employeeId + "</td><td style='padding:5px;'align='center'>"+result.checkInTime +"</td><td style='padding:5px;'align='center'> "+result.checkOutTime+"</td><td style='padding:5px;'align='center'> "+result.timeClocked+"</td></tr>";   
+	    			   });
+	    			  
+	    			   content += "</table>";
+					   var w = window.open();
+					   $(w.document.body).html(content);
+    			   }
 					   
     		   }
     		   

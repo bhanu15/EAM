@@ -8,6 +8,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
 import com.rakuten.eam.dao.EmployeeDAO;
 import com.rakuten.eam.exception.EmployeeAlreadyExistException;
 import com.rakuten.eam.exception.EmployeeNotFoundException;
@@ -70,10 +71,16 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 		String hql = "FROM Employee WHERE LOWER(firstName) LIKE '%" +searchKeyword +"%'" 
 				   + " or  LOWER(lastName) LIKE '%" +searchKeyword+"%'"
 				   + " or  LOWER(nickName) LIKE '%" +searchKeyword+"%'"
+				   + " or  employee_id LIKE '%" +searchKeyword+"%'"
 				   + " or  LOWER(emailId) LIKE '%" +searchKeyword+"%'";
 		Query query = session.createQuery(hql);
-		List<Employee> results = query.list();
-		return results;
+		List<Employee> employees =(List<Employee>)query.list();
+		
+		if(employees.isEmpty()){
+			throw new EmployeeNotFoundException("No Record found with keyword :"+searchKeyword);
+		}
+		
+		return employees;
 	}
 
 }

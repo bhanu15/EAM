@@ -129,6 +129,9 @@
 		     	        dataType: 'json',
 		     	        async: false ,
 		     	        success: function(employees) { 
+		     	        	if(employees.success == false){
+		     	        		return ;
+		     	        	}
 		     	        	 $.each(employees, function (i, result) {     
 		     	        		var item = {
 	 		  			     	    	label: result.firstName+" "+result.lastName+" "+result.employeeId,
@@ -145,7 +148,15 @@
     	   
 		      
     	   $("#userSearch").click(function(){ 
-    		   employeeId=$("input#employeeId").val();  
+    			
+    		   var  employeeId=$("input#employeeId").val();
+    		  
+    		 	if(isNaN(employeeId)){
+    				$("#status").html("Employee not found "+employeeId);
+    		    	$("#status").show();
+    			  	return;
+    		  	}
+    		 	
     		   $.ajax({ 
     		   type:"GET", 
     		   url:employeeContext+"employee/"+employeeId,  
@@ -262,23 +273,22 @@
     		   type:"GET", 
     		   dataType: 'json',
     		   url: generateReportURL,  
-    		   success: function( employeeReport ){ 
+    		   success:function(employeeReport){
     			   if(employeeReport.success == false){
     				   $("#status").html(employeeReport.message);
 	     		       $("#status").show();
-	     		       
-    			   }else{
-	    			   var content = "<table border='3' align='center' style='margin-top:50px;'>";
-	    			   content += "<tr bgcolor='#bf0000'><td>" + "Employee Id </td><td> CheckIn Time  </td><td> CheckOut Time </td><td>Total Time Clocked </td></tr>";
-	    			   $.each(employeeReport, function (i, result) {     
-	 			 			
-	 			 			content += "<tr><td style='padding:5px;'align='center'>" + result.employeeId + "</td><td style='padding:5px;'align='center'>"+result.checkInTime +"</td><td style='padding:5px;'align='center'> "+result.checkOutTime+"</td><td style='padding:5px;'align='center'> "+result.timeClocked+"</td></tr>";   
-	    			   });
-	    			  
-	    			   content += "</table>";
-					   var w = window.open();
-					   $(w.document.body).html(content);
+	     		       return;
     			   }
+    			   var content = "<table border='3' align='center' style='margin-top:50px;'>";
+    			   content += "<tr bgcolor='#bf0000'><td>" + "Employee Id </td><td> CheckIn Time  </td><td> CheckOut Time </td><td>Total Time Clocked </td></tr>";
+    			   $.each(employeeReport, function (i, result) {     
+ 			 			
+ 			 			content += "<tr><td style='padding:5px;'align='center'>" + result.employeeId + "</td><td style='padding:5px;'align='center'>"+result.checkInTime +"</td><td style='padding:5px;'align='center'> "+result.checkOutTime+"</td><td style='padding:5px;'align='center'> "+result.timeClocked+"</td></tr>";   
+    			   });
+    			  
+    			   content += "</table>";
+				   var w = window.open();
+				   $(w.document.body).html(content);
 					   
     		   }
     		   

@@ -8,7 +8,9 @@ public class EmployeeAlreadyExistException extends RuntimeException{
 	private String exceptionMsg;
 	   
 	   public EmployeeAlreadyExistException(String exceptionMsg) {
-	      this.exceptionMsg = exceptionMsg;
+	      super(exceptionMsg);
+		   this.exceptionMsg = exceptionMsg;
+	      
 	   }
 	   
 	   public String getExceptionMsg(){

@@ -64,7 +64,7 @@
 	       <script>
 	       $(document).ready(function(){
 	    	   
-	    	   var employeeContext = "/eam/";
+	    	   var employeeContext = "/EmployeeManager/";
 	    	   
 		       $("#save").click(function(){
 		    	   var userEmail = $("#emailId").val();

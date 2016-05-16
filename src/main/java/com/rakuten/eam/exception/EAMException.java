@@ -7,6 +7,7 @@ public class EAMException extends RuntimeException
 	private String exceptionMsg;
 	   
 	   public EAMException(String exceptionMsg) {
+		   super(exceptionMsg);
 	      this.exceptionMsg = exceptionMsg;
 	   }
 	   

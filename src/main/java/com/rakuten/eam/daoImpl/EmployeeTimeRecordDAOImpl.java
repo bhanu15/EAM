@@ -79,7 +79,7 @@ public class EmployeeTimeRecordDAOImpl implements  EmployeeTimeRecordDAO{
 				.list();
 		
 		if(checkInCheckOutRecords.isEmpty()){
-			throw new CheckInCheckOutReportException("No Records found for employee Id : "+employeeId);
+			throw new CheckInCheckOutReportException("No Time Records found for employee Id : "+employeeId);
 		}
 		
 		List<CheckInCheckOutReport> checkInCheckOutReports = new ArrayList<CheckInCheckOutReport>();

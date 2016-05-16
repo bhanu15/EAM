@@ -63,13 +63,13 @@ public class EmployeeTimeRecordController {
 	}
 	
 	@ExceptionHandler(LoginRecordAlreadyExistException.class)
-	  public Status loginRecordAlreadyExistException(RuntimeException exception) {
-	    return new Status(false, "Employee is already checked in for today");
+	  public Status loginRecordAlreadyExistException(RuntimeException loginRecordAlreadyExistException) {
+	    return new Status(false, loginRecordAlreadyExistException.getMessage());
 	  }
 	
 	@ExceptionHandler(EmployeeNotFoundException.class)
 	  public Status employeeNotFoundException(RuntimeException exception) {
-	    return new Status(false, "Employee not found");
+	    return new Status(false, exception.getMessage());
 	  }
 
 	@ExceptionHandler(CheckInCheckOutReportException.class)

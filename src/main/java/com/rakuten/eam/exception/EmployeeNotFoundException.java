@@ -6,6 +6,7 @@ public class EmployeeNotFoundException extends RuntimeException{
 	private String exceptionMsg;
 	   
 	   public EmployeeNotFoundException(String exceptionMsg) {
+		   super(exceptionMsg);
 	      this.exceptionMsg = exceptionMsg;
 	   }
 	   

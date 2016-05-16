@@ -6,6 +6,7 @@ public class LoginRecordAlreadyExistException extends RuntimeException{
 	private String exceptionMsg;
 	   
 	   public LoginRecordAlreadyExistException(String exceptionMsg) {
+		   super(exceptionMsg);
 	      this.exceptionMsg = exceptionMsg;
 	   }
 	   

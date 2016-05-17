@@ -28,7 +28,7 @@ public class UserController
 		return new ModelAndView("login");
 		
 	}
-	@RequestMapping(value="/authenticate",method=RequestMethod.GET)
+	@RequestMapping(value="/authenticate",method=RequestMethod.POST)
 	public ModelAndView executeLogin(HttpServletRequest request, HttpServletResponse response, @ModelAttribute("user") User user){
 		ModelAndView model= null;
 		boolean isValidUser = userService.authenticateUser(user);
@@ -41,6 +41,15 @@ public class UserController
 			model = new ModelAndView("login");	
 		}
 		return model;
+	}
+	
+	@RequestMapping(value="/authenticate",method=RequestMethod.GET)
+	public ModelAndView executeLogin(HttpServletRequest request, HttpServletResponse response){
+		if(request.getSession().getAttribute("user")!=null){
+			return new ModelAndView("welcome", "user", request.getSession().getAttribute("user"));
+		}
+		return new ModelAndView("login");
+		
 	}
 	
 }

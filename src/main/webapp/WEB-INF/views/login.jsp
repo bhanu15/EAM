@@ -65,7 +65,7 @@
     <body>
     	<div class="login-page">
     	<div class="form">
-        <form:form id="loginForm" method="get" action="authenticate" modelAttribute="user">
+        <form:form id="loginForm" method="post" action="authenticate" modelAttribute="user">
         <div class="message"> ${message}</div>
             <form:input id="userName" name="userName" path="userName" placeholder="username" required="true"/><br>
             <form:password id="password" name="password" path="password" placeholder="password" required="true"/><br>
